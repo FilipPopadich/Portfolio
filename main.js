@@ -1,3 +1,5 @@
+gsap.registerPlugin(ScrollTrigger);
+
 const ball = document.querySelector(".tennis-ball");
 const ballSize = 36;
 const topStart = 12;
@@ -8,7 +10,7 @@ let vh = window.innerHeight;
 let vw = window.innerWidth;
 
 function getFixedRightPosition() {
-    const rightMargin = 6;
+    const rightMargin = 5;
     return vw - ballSize - rightMargin;
 }
 
@@ -25,6 +27,7 @@ function updateBallMotion() {
     const bouncePhase = (progress * bounceCount) % 1;
     const parabola = 4 * bouncePhase * (1 - bouncePhase);
     const swingDistance = Math.min(vw * 0.06, 40);
+    const leftOffset = parabola * swingDistance;
     let finalLeft = fixedLeft - leftOffset;
     finalLeft = Math.min(Math.max(finalLeft, 0), vw - ballSize);
     const xOffset = finalLeft - (vw * 0.5) + ballSize;
@@ -45,6 +48,7 @@ window.addEventListener("resize", () => {
     vh = window.innerHeight;
     vw = window.innerWidth;
     updateBallMotion();
+    ScrollTrigger.refresh();
 });
 
 updateBallMotion();
