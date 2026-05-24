@@ -35,13 +35,21 @@ function updateBallMotion() {
     ball.style.transform = `translateX(calc(-100% + ${xOffset}px)) translateY(${y}px) rotate(${totalRotation}deg)`;
 }
 
-ScrollTrigger.create({
-    trigger: "body",
-    start: 0,
-    end: "max",
-    scrub: 0.75,
-    onUpdate: updateBallMotion,
-    invalidateOnRefresh: true
+window.addEventListener("load", () => {
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+        ScrollTrigger.create({
+            trigger: "body",
+            start: 0,
+            end: "max",
+            scrub: 0.75,
+            scroller: window,
+            onUpdate: updateBallMotion,
+            invalidateOnRefresh: true
+        });
+        updateBallMotion();
+        ScrollTrigger.refresh();
+    }
 });
 
 window.addEventListener("resize", () => {
@@ -50,8 +58,6 @@ window.addEventListener("resize", () => {
     updateBallMotion();
     ScrollTrigger.refresh();
 });
-
-updateBallMotion();
 
 const sections = document.querySelectorAll('section[id]');
 const navLinks = document.querySelectorAll('.nav-links a');
